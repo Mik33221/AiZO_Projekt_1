@@ -1,7 +1,11 @@
 #include "Menu.h"
+#include "TableManager.h"
+#include "TableManager.cpp"
+#include <iostream>
 
 int main()
 {
-	Menu m1;
-	m1.run();
+	TableManager<int> LinkingTable;
+	std::cout << LinkingTable.randomTab(5);
+
 }

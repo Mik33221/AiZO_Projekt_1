@@ -4,6 +4,7 @@
 
 using namespace std;
 
-void Menu::run() {
+void Menu::run()
+{
 	cout << "Hello Word!";
 }
