@@ -25,5 +25,11 @@
     <ClInclude Include="TableManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InsertSort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VirtualSort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
