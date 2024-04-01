@@ -1,11 +1,16 @@
 #include "Menu.h"
 #include "TableManager.h"
-#include "TableManager.cpp"
 #include <iostream>
 
 int main()
 {
-	TableManager<int> LinkingTable;
-	std::cout << LinkingTable.randomTab(5);
+
+	TableManager<int> table(5);
+
+	for (int i = 0; i < 5; i++) {
+		std::cout << table.tab[i] << std::endl;
+	}
+
+	std::cout << std::endl;
 
 }
