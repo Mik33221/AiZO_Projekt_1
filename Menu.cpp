@@ -3,29 +3,30 @@
 #include "InsertSort.h"
 #include "HeapSort.h"
 #include "QuickSort.h"
+#include "ShellSort.h"
 
 #include <iostream>
 
-#define N 5000000
+#define N 5
 #define TYPE int
 
 using namespace std;
 
 //work functions
 template<typename T>
-void viewTab(T* tab) 
+void viewTab(T* tab)
 {
-	for (int i = 0; i < N; i++) 
+	for (int i = 0; i < N; i++)
 		std::cout << tab[i] << std::endl;
 
 	std::cout << std::endl;
 }
 
 template<typename T>
-string isSorted(T* tab) 
+string isSorted(T* tab)
 {
-	for (int i = 1; i < N; i++) 
-		if (tab[i] < tab[i - 1]) 
+	for (int i = 1; i < N; i++)
+		if (tab[i] < tab[i - 1])
 			return "Table not sorted\n";
 
 	return "Table sorted\n";
@@ -43,22 +44,39 @@ void Menu::workflow()
 
 	InsertSort<TYPE> insertSort;
 	HeapSort<TYPE> heapSort;
-	QuickSort<TYPE> quickSort(QuickSort<TYPE>::pivotChoice::RIGHT);
+	QuickSort<TYPE> quickSort;
+	ShellSort<TYPE> shellSort;
 
 	auto time = quickSort.sort(table.tabCopy, N);
 
-	for (int i = 0; i < 100; i++) {
-		table.newTab();
-		viewTab(table.tabCopy);
-		time = quickSort.sort(table.tabCopy, N);
-		viewTab(table.tabCopy);
-		std::cout << isSorted(table.tabCopy);
-		std::cout << "Time: " << time << "ms" << std::endl << std::endl;
-	}
+	table.newTab();
+	time = insertSort.sort(table.tabCopy, N);
+	std::cout << isSorted(table.tabCopy);
+	std::cout << "Insert sort time: " << time << "ms" << std::endl << std::endl;
 
+	table.newTab();
+	time = heapSort.sort(table.tabCopy, N);
+	std::cout << isSorted(table.tabCopy);
+	std::cout << "Heap sort time: " << time << "ms" << std::endl << std::endl;
+
+	table.newTab();
+	time = quickSort.sort(table.tabCopy, N);
+	std::cout << isSorted(table.tabCopy);
+	std::cout << "Quick sort time: " << time << "ms" << std::endl << std::endl;
+
+	table.newTab();
+	time = shellSort.sort(table.tabCopy, N);
+	std::cout << isSorted(table.tabCopy);
+	std::cout << "Shell sort time: " << time << "ms" << std::endl << std::endl;
+
+	shellSort.setGap(ShellSort<TYPE>::gapChoice::HIBBARD);
+	table.newTab();
+	time = shellSort.sort(table.tabCopy, N);
+	std::cout << isSorted(table.tabCopy);
+	std::cout << "Shell sort time: " << time << "ms" << std::endl << std::endl;
 }
 
-void Menu::test_algorithms() 
+void Menu::test_algorithms()
 {
 	cout << "No";
 }
