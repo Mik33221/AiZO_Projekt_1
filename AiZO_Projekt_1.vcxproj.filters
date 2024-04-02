@@ -31,5 +31,11 @@
     <ClInclude Include="VirtualSort.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeapSort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QuickSort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

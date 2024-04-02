@@ -131,6 +131,8 @@
     <ClCompile Include="Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="QuickSort.h" />
+    <ClInclude Include="HeapSort.h" />
     <ClInclude Include="VirtualSort.h" />
     <ClInclude Include="InsertSort.h" />
     <ClInclude Include="Menu.h" />

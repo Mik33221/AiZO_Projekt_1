@@ -1,10 +1,11 @@
 #pragma once
+#include <chrono>
 
+template<typename T>
 class VirtualSort
 {
 public:
 
-	template <typename T>
-	auto sort(T* tab, int length);
+	auto sort();
 
 };

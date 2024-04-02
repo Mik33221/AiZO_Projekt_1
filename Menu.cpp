@@ -1,30 +1,34 @@
 #include "Menu.h"
 #include "TableManager.h"
 #include "InsertSort.h"
+#include "HeapSort.h"
+#include "QuickSort.h"
 
 #include <iostream>
 
-#define N 5
+#define N 100000
 #define TYPE int
 
 using namespace std;
 
 //work functions
 template<typename T>
-void viewTab(T* tab) {
-	for (int i = 0; i < N; i++) {
+void viewTab(T* tab) 
+{
+	for (int i = 0; i < N; i++) 
 		std::cout << tab[i] << std::endl;
-	}
 
 	std::cout << std::endl;
 }
 
 template<typename T>
-string isSorted(T* tab) {
-	for (int i = 1; i < N; i++) {
-		if (tab[i] < tab[i - 1]) return "Table not sorted\n\n";
-	}
-	return "Table sorted\n\n";
+string isSorted(T* tab) 
+{
+	for (int i = 1; i < N; i++) 
+		if (tab[i] < tab[i - 1]) 
+			return "Table not sorted\n";
+
+	return "Table sorted\n";
 }
 
 //menu
@@ -37,17 +41,18 @@ void Menu::workflow()
 {
 	TableManager<TYPE> table(N);
 
-	//viewTab<>(table.tab);
+	InsertSort<TYPE> insertSort(table.tabCopy, N);
+	HeapSort<TYPE> heapSort(table.tabCopy, N);
 
-	//viewTab(table.tabCopy);
-	
-	InsertSort sort1;	//drop polymorphism in this case
-	auto time = sort1.sort<TYPE>(table.tabCopy, N);
-	
-	//viewTab(table.tabCopy);
+	table.renewTab();
+	auto time = heapSort.sort();
 	std::cout << isSorted(table.tabCopy);
+	std::cout << "Time: " << time << "ms" << std::endl << std::endl;
 
-	std::cout << "Time: " << time << "ms" << std::endl;
+	table.renewTab();
+	time = insertSort.sort();
+	std::cout << isSorted(table.tabCopy);
+	std::cout << "Time: " << time << "ms" << std::endl << std::endl;
 
 }
 
