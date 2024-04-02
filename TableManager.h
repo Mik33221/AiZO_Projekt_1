@@ -1,7 +1,7 @@
 #pragma once
 #include <random>
 
-template <typename T>
+template <typename T>	//length and type of tab must be initialized with constructor
 class TableManager
 {
 public:
@@ -9,12 +9,13 @@ public:
 	T* tab;						//current table
 	T* tabCopy;					//copy used for sorting
 
-	TableManager<T>(int length)	//seeds random number generator and creates tab
+	TableManager<T>(int tableLength)	//seeds random number generator and creates tab
 	{
 		std::random_device rd;
 		mt_device.seed(rd());
-		tab = randomTab(length);
-		tabCopy = copyTab(tab, length);
+		length = tableLength;
+		tab = randomTab();
+		tabCopy = copyTab(tab);
 	}
 
 	~TableManager<T>()
@@ -23,20 +24,27 @@ public:
 		delete[] tabCopy;
 	}
 
-	void newTab(int length)		//replaces N length tab with new one
+	void newTab()		//replaces tab with new random one
 	{
 		delete[] tab;
 		delete[] tabCopy;
-		tab = randomTab(length);
-		tabCopy = copyTab(tab, length);
+		tab = randomTab();
+		tabCopy = copyTab(tab);
+	}
+
+	void renewTab()
+	{
+		delete[] tabCopy;
+		tabCopy = copyTab(tab);
 	}
 
 private:
 
+	int length;
 	std::mt19937 mt_device;
 	std::uniform_int_distribution<> diceRoll;
 
-	T* copyTab(T* tab, int length) //creates new tab and copies content of tab to it
+	T* copyTab(T* tab) //creates new tab and copies content of arg to it
 	{
 		T* array = new T[length];
 		for (int i = 0; i < length; ++i) {
@@ -45,7 +53,7 @@ private:
 		return array;
 	}
 
-	T* randomTab(int length)	//creates and fills N length tab with random numbers/chars
+	T* randomTab()	//creates and fills N length tab with random numbers/chars
 	{
 		T* array = new T[length];
 		for (int i = 0; i < length; ++i) {
