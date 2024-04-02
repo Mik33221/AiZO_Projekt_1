@@ -27,7 +27,7 @@ public:
 
 		auto start_time = std::chrono::high_resolution_clock::now();
 
-		quickSort(p,r);
+		quickSort(p, r);
 
 		auto end_time = std::chrono::high_resolution_clock::now();
 		auto time = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
@@ -46,6 +46,7 @@ private:
 			int partitionIndex = partition(p, r);
 			quickSort(p, partitionIndex);			//recurrent quickSort call for left side
 			quickSort(partitionIndex + 1, r);		//quickSort call for right side
+
 		}
 	}
 
@@ -54,8 +55,7 @@ private:
 		T pivotValue = 0;
 		int i, j, random;
 
-		i = p - 1;
-		j = r + 1;
+
 
 		switch (pivot)	//switch choosing pivot
 		{
@@ -65,6 +65,7 @@ private:
 
 		case RIGHT:
 			pivotValue = tab[r];
+			std::swap(tab[r], tab[p]);	//enables us to use unmodified algorithm for rightmost sorting
 			break;
 
 		case MIDDLE:
@@ -74,12 +75,14 @@ private:
 		case RANDOM:
 			random = p + rand() % (r - p + 1);
 			pivotValue = tab[random];
-			std::swap(tab[random], tab[p]); //move pivot to the leftmost position
 			break;
 
 		default:
 			break;
 		}
+		i = p - 1;
+		j = r + 1;
+
 
 		while (true) {		//cormen guided implementation
 			do {
@@ -90,10 +93,9 @@ private:
 			} while (tab[i] < pivotValue);
 			if (i < j)
 				std::swap(tab[i], tab[j]);
-			else
+			else 
 				return j;
-			
 		}
-		
 	}
+
 };

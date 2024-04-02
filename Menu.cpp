@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-#define N 500000
+#define N 5000000
 #define TYPE int
 
 using namespace std;
@@ -43,24 +43,18 @@ void Menu::workflow()
 
 	InsertSort<TYPE> insertSort;
 	HeapSort<TYPE> heapSort;
-	QuickSort<TYPE> quickSort(QuickSort<TYPE>::pivotChoice::MIDDLE);
+	QuickSort<TYPE> quickSort(QuickSort<TYPE>::pivotChoice::RIGHT);
 
 	auto time = quickSort.sort(table.tabCopy, N);
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 100; i++) {
 		table.newTab();
+		viewTab(table.tabCopy);
 		time = quickSort.sort(table.tabCopy, N);
+		viewTab(table.tabCopy);
 		std::cout << isSorted(table.tabCopy);
 		std::cout << "Time: " << time << "ms" << std::endl << std::endl;
 	}
-	
-	
-	table.newTab();
-	viewTab(table.tabCopy);
-	time = insertSort.sort(table.tabCopy, N);
-	viewTab(table.tabCopy);
-	std::cout << isSorted(table.tabCopy);
-	std::cout << "Time: " << time << "ms" << std::endl << std::endl;
 
 }
 
