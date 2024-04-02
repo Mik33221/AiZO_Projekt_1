@@ -55,7 +55,7 @@ private:
 
 	T* tab = NULL;
 	int i = 0, j = 0, length = 0;
-	T key;
+	T key = 0;
 	gapChoice chosenGap;
 
 	void gappedInsertionSort(int gap) {

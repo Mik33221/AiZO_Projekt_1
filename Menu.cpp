@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#define N 5
+#define N 50000
 #define TYPE int
 
 using namespace std;
@@ -35,7 +35,7 @@ string isSorted(T* tab)
 //menu
 void Menu::run()
 {
-	workflow();
+	test_algorithms();
 }
 
 void Menu::workflow()
@@ -73,10 +73,14 @@ void Menu::workflow()
 	table.newTab();
 	time = shellSort.sort(table.tabCopy, N);
 	std::cout << isSorted(table.tabCopy);
-	std::cout << "Shell sort time: " << time << "ms" << std::endl << std::endl;
+	std::cout << "Shell Hibbard sort time: " << time << "ms" << std::endl << std::endl;
 }
 
 void Menu::test_algorithms()
 {
-	cout << "No";
+	cout << "1 - Wczytaj tablice z pliku .txt\n"
+		"2 - Wygeneruj losowa tablice\n"
+		"3 - Wyswietl nieposortowana tablice\n"
+		"4 - Sortuj tablice\n"
+		"5 - Wyswietl posortowana tablice\n";
 }
