@@ -9,7 +9,7 @@ public:
 	T* tab;						//current table
 	T* tabCopy;					//copy used for sorting
 
-	TableManager<T>(int tableLength)	//seeds random number generator and creates tab
+	TableManager<T>(int tableLength)	//seeds random number generator, creates tab and copy for sorting
 	{
 		std::random_device rd;
 		mt_device.seed(rd());
@@ -32,7 +32,7 @@ public:
 		tabCopy = copyTab(tab);
 	}
 
-	void renewTab()
+	void renewTab()		//provides new tab for sorting, wihout randomizing
 	{
 		delete[] tabCopy;
 		tabCopy = copyTab(tab);
@@ -63,7 +63,7 @@ private:
 	}
 
 	template <typename T>
-	T randomElement()			//generates random number/char
+	T randomElement()			//generates random int/float/double
 	{
 		T element = diceRoll(mt_device);
 
@@ -73,9 +73,8 @@ private:
 	template <>
 	char randomElement<char>()	//specified char range for user visibility
 	{
-		T element = diceRoll(mt_device)%25+65;
+		T element = diceRoll(mt_device) % 25 + 65;
 
 		return element;
 	}
-	
 };
