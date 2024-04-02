@@ -6,14 +6,10 @@ class InsertSort : public VirtualSort<T>
 {
 public:
 
-	InsertSort(T* tab, int length) 
+	auto sort(T* table, int n)
 	{
-		this->tab = tab;
-		this->length = length;
-	}
-
-	auto sort()
-	{
+		tab = table;
+		length = n;
 		int i, j;
 		T key;
 

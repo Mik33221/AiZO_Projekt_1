@@ -6,8 +6,10 @@ class HeapSort : public VirtualSort<T>
 {
 public:
 
-    auto sort()
+    auto sort(T* table, int n)
     {
+        tab = table;
+        length = n;
         int i;
 
         auto start_time = std::chrono::high_resolution_clock::now();
@@ -26,12 +28,6 @@ public:
 
         return time;
     }
-
-	HeapSort(T* tab, int length)
-	{
-		this->tab = tab;
-		this->length = length;
-	}
 
 private:
 
