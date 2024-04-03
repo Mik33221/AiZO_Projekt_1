@@ -6,8 +6,10 @@
 #include "ShellSort.h"
 
 #include <iostream>
+#include <string>
+#include <fstream>
 
-#define M 7
+#define M 3
 
 template<typename T>
 class Menu
@@ -29,6 +31,30 @@ class Menu
 
 		return "Tablica posortowana\n";
 	}
+	
+	static void writeToFile(std::string filename, auto content) {
+		
+		std::ofstream outputFile(filename);
+
+		if (!outputFile.is_open()) {
+			std::cerr << "Error opening file: " << filename << std::endl;
+			return;
+		}
+
+		// Convert milliseconds to time_t
+		std::time_t time_seconds = std::chrono::duration_cast<std::chrono::seconds>(content).count();
+
+		// Convert time_t to string representation
+		std::string time_str = std::ctime(&time_seconds);
+
+		outputFile << time_str;
+
+		//std::cout << content;
+		std::cout << time_str;
+
+		outputFile.close();
+	}
+
 public:
 
 	static void run()				//Displays menu
@@ -37,7 +63,7 @@ public:
 		std::string input;
 
 		std::cout << "1 - Testuj algorytmy\n"
-			"2 - Rozpocznij workflow (spowoduje utworzenie pliku output.txt i testy wszystkich algorytmow) aktualny runtime > 40 minut\n"
+			"2 - Rozpocznij workflow (spowoduje utworzenie plikow output1.txt, testy wszystkich algorytmow) aktualny runtime ~ 20 minut\n"
 			"0 - Wyjdz\n";
 
 		std::cin >> input;
@@ -66,7 +92,7 @@ private:
 
 	static void workflow()			//Runs automatized algorythm flow
 	{
-		int N[M] = { 5000, 10000, 20000, 40000, 60000, 100000, 200000 };
+		int N[M] = { 5000, 10000, 20000 };//, 40000, 60000, 80000, 100000 };
 
 		TableManager<T> table(10);
 
@@ -77,7 +103,7 @@ private:
 
 		auto time = quickSort.sort(table.tabCopy, 10);
 
-		for (int i = 0; i < 1; i++)		//dla kazdej ilosci danych
+		for (int i = 0; i < M; i++)		//dla kazdej ilosci danych
 		{
 			table.newTab(N[i]);
 			std::cout << N[i] << " LOOP\n";
@@ -87,9 +113,11 @@ private:
 				table.newTab();
 				time = insertSort.sort(table.tabCopy, N[i]);
 				std::cout << time << std::endl;
+				//writeToFile("output.txt", time);
 
 				table.renewTab();
 				time = heapSort.sort(table.tabCopy, N[i]);
+				std::cout << time << std::endl;
 
 				table.renewTab();
 				shellSort.setGap(ShellSort<T>::gapChoice::SHELL);
