@@ -7,86 +7,249 @@
 
 #include <iostream>
 
-#define N 50000
+#define M 7
+
 template<typename T>
 class Menu
 {
 	//work functions
-	void viewTab(T* tab)
+	static void viewTab(T* tab, int n)
 	{
-		for (int i = 0; i < N; i++)
+		for (int i = 0; i < n; i++)
 			std::cout << tab[i] << std::endl;
 
 		std::cout << std::endl;
 	}
 
-	std::string isSorted(T* tab)
+	static std::string isSorted(T* tab, int n)
 	{
-		for (int i = 1; i < N; i++)
+		for (int i = 1; i < n; i++)
 			if (tab[i] < tab[i - 1])
-				return "Table not sorted\n";
+				return "Tablica nie posortowana\n";
 
-		return "Table sorted\n";
+		return "Tablica posortowana\n";
 	}
 public:
 
 	static void run()				//Displays menu
 	{
-		test_algorithms();
+		int menu;
+		std::string input;
+
+		std::cout << "1 - Testuj algorytmy\n"
+			"2 - Rozpocznij workflow (spowoduje utworzenie pliku output.txt i testy wszystkich algorytmow) aktualny runtime > 40 minut\n"
+			"0 - Wyjdz\n";
+
+		std::cin >> input;
+
+		try {
+			menu = std::stoi(input);
+		}
+		catch (const std::exception& e) {
+			std::cerr << "Error: " << e.what() << std::endl;
+			menu = 0;
+		}
+
+		switch (menu) {
+		case 1:
+			testAlgorithms();
+			break;
+		case 2:
+			workflow();
+			break;
+		default:
+			break;
+		}
 	}
 
 private:
 
 	static void workflow()			//Runs automatized algorythm flow
 	{
-		TableManager<T> table(N);
+		int N[M] = { 5000, 10000, 20000, 40000, 60000, 100000, 200000 };
+
+		TableManager<T> table(10);
 
 		InsertSort<T> insertSort;
 		HeapSort<T> heapSort;
-		QuickSort<T> quickSort;
 		ShellSort<T> shellSort;
+		QuickSort<T> quickSort;
 
-		auto time = quickSort.sort(table.tabCopy, N);
+		auto time = quickSort.sort(table.tabCopy, 10);
 
-		table.newTab();
-		time = insertSort.sort(table.tabCopy, N);
-		std::cout << isSorted(table.tabCopy);
-		std::cout << "Insert sort time: " << time << "ms" << std::endl << std::endl;
+		for (int i = 0; i < 1; i++)		//dla kazdej ilosci danych
+		{
+			table.newTab(N[i]);
+			std::cout << N[i] << " LOOP\n";
 
-		table.newTab();
-		time = heapSort.sort(table.tabCopy, N);
-		std::cout << isSorted(table.tabCopy);
-		std::cout << "Heap sort time: " << time << "ms" << std::endl << std::endl;
+			for (int j = 0; j < 100; j++) //100 powtorzen
+			{							//polimorficzne podejscie niestety nie jest kompatybilne z templatami
+				table.newTab();
+				time = insertSort.sort(table.tabCopy, N[i]);
+				std::cout << time << std::endl;
 
-		table.newTab();
-		time = quickSort.sort(table.tabCopy, N);
-		std::cout << isSorted(table.tabCopy);
-		std::cout << "Quick sort time: " << time << "ms" << std::endl << std::endl;
+				table.renewTab();
+				time = heapSort.sort(table.tabCopy, N[i]);
 
-		table.newTab();
-		time = shellSort.sort(table.tabCopy, N);
-		std::cout << isSorted(table.tabCopy);
-		std::cout << "Shell sort time: " << time << "ms" << std::endl << std::endl;
+				table.renewTab();
+				shellSort.setGap(ShellSort<T>::gapChoice::SHELL);
+				time = shellSort.sort(table.tabCopy, N[i]);
 
-		shellSort.setGap(ShellSort<T>::gapChoice::HIBBARD);
-		table.newTab();
-		time = shellSort.sort(table.tabCopy, N);
-		std::cout << isSorted(table.tabCopy);
-		std::cout << "Shell Hibbard sort time: " << time << "ms" << std::endl << std::endl;
+				table.renewTab();
+				shellSort.setGap(ShellSort<T>::gapChoice::HIBBARD);
+				time = shellSort.sort(table.tabCopy, N[i]);
+
+				table.renewTab();
+				quickSort.setPivot(QuickSort<T>::pivotChoice::LEFT);
+				time = quickSort.sort(table.tabCopy, N[i]);
+
+				table.renewTab();
+				quickSort.setPivot(QuickSort<T>::pivotChoice::RIGHT);
+				time = quickSort.sort(table.tabCopy, N[i]);
+
+				table.renewTab();
+				quickSort.setPivot(QuickSort<T>::pivotChoice::MIDDLE);
+				time = quickSort.sort(table.tabCopy, N[i]);
+
+				table.renewTab();
+				quickSort.setPivot(QuickSort<T>::pivotChoice::RANDOM);
+				time = quickSort.sort(table.tabCopy, N[i]);
+			}
+		}
+		std::cout << "Workflow ended";
 	}
 
-	static void test_algorithms()	//Displays algorythm testing menu
+	static void testAlgorithms()	//Displays algorythm testing menu
 	{
+		TableManager<T> table(10);
+		std::string fileName;
 		int menu;
+		std::string input;
+
+		InsertSort<T> insertSort;
+		HeapSort<T> heapSort;
+		ShellSort<T> shellSort;
+		QuickSort<T> quickSort;
+
 		do {
 			std::cout << "1 - Wczytaj tablice z pliku .txt\n"
 				"2 - Wygeneruj losowa tablice\n"
 				"3 - Wyswietl nieposortowana tablice\n"
 				"4 - Sortuj tablice\n"
-				"5 - Wyswietl posortowana tablice\n"
-				"0 - Cofnij do wyboru typu\n";
-			std::cin >> menu;
-			
+				"5 - Wyswietl/sprawdz posortowana tablice\n"
+				"0 - Wyjdz\n";
+
+			std::cin >> input;
+
+			try {
+				menu = std::stoi(input);
+			}
+			catch (const std::exception& e) {
+				std::cerr << "Error: " << e.what() << std::endl;
+				menu = 10;
+			}
+
+			switch (menu)
+			{
+			case 1:
+				std::cout << "Podaj nazwe pliku .txt: ";
+				std::cin >> fileName;
+				fileName = fileName + ".txt";
+				table.readTab(fileName);
+				break;
+			case 2:
+				int l;
+				std::cout << "\nPodaj wielkosc tablicy: ";
+				std::cin >> input;
+				try {
+					l = std::stoi(input);
+				}
+				catch (const std::exception& e) {
+					std::cerr << "Error: " << e.what() << std::endl;
+					break;
+				}
+				table.newTab(l);
+				break;
+			case 3:
+				viewTab(table.tab, table.getLength());
+				break;
+			case 4:
+				table.renewTab();							//makes sure we are sorting unsorted array
+				std::cout << "\n1 - InsertSort\n"
+					"2 - HeapSort\n"
+					"3 - ShellSort\n"
+					"4 - ShellSort Hibbard\n"
+					"5 - QuickSort pivot left\n"
+					"6 - QuickSort pivot right\n"
+					"7 - QuickSort pivot middle\n"
+					"8 - QuickSort pivot random\n";
+
+				std::cin >> input;
+				try {
+					menu = std::stoi(input);
+				}
+				catch (const std::exception& e) {
+					std::cerr << "Error: " << e.what() << std::endl;
+					std::cout << "Tablica nie posortowana, bledny wybor\n";
+					return;
+				}
+
+				switch (menu)
+				{
+				case 1:
+					insertSort.sort(table.tabCopy, table.getLength());
+					break;
+
+				case 2:
+					heapSort.sort(table.tabCopy, table.getLength());
+					break;
+
+				case 3:
+					shellSort.setGap(ShellSort<T>::gapChoice::SHELL);
+					shellSort.sort(table.tabCopy, table.getLength());
+					break;
+
+				case 4:
+					shellSort.setGap(ShellSort<T>::gapChoice::HIBBARD);
+					shellSort.sort(table.tabCopy, table.getLength());
+					break;
+
+				case 5:
+					quickSort.setPivot(QuickSort<T>::pivotChoice::LEFT);
+					quickSort.sort(table.tabCopy, table.getLength());
+					break;
+
+				case 6:
+					quickSort.setPivot(QuickSort<T>::pivotChoice::RIGHT);
+					quickSort.sort(table.tabCopy, table.getLength());
+					break;
+
+				case 7:
+					quickSort.setPivot(QuickSort<T>::pivotChoice::MIDDLE);
+					quickSort.sort(table.tabCopy, table.getLength());
+					break;
+
+				case 8:
+					quickSort.setPivot(QuickSort<T>::pivotChoice::RANDOM);
+					quickSort.sort(table.tabCopy, table.getLength());
+					break;
+
+				default:
+					std::cout << "Tablica nie posortowana, bledny wybor\n";
+					break;
+				}
+				std::cout << "Tablica posortowana\n";
+				break;
+			case 5:
+				if (table.getLength() < 20)
+					viewTab(table.tabCopy, table.getLength());
+				else
+					std::cout << isSorted(table.tabCopy, table.getLength());
+				break;
+
+			default:
+				break;
+			}
 		} while (menu);
-	}	
+	}
 };

@@ -23,7 +23,7 @@ public:
 		length = n;
 		auto start_time = std::chrono::high_resolution_clock::now();
 		int gap;
-		
+
 		switch (chosenGap) {
 		case HIBBARD:
 			start_time = std::chrono::high_resolution_clock::now();
@@ -43,7 +43,6 @@ public:
 				gappedInsertionSort(gap);
 			}
 		}
-		
 
 		auto end_time = std::chrono::high_resolution_clock::now();
 		auto time = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();

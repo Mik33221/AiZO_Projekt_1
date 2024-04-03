@@ -35,5 +35,4 @@ private:
 
 	T* tab;
 	int length;
-
 };

@@ -46,7 +46,6 @@ private:
 			int partitionIndex = partition(p, r);
 			quickSort(p, partitionIndex);			//recurrent quickSort call for left side
 			quickSort(partitionIndex + 1, r);		//quickSort call for right side
-
 		}
 	}
 
@@ -54,8 +53,6 @@ private:
 	{
 		T pivotValue = 0;
 		int i, j, random;
-
-
 
 		switch (pivot)	//switch choosing pivot
 		{
@@ -83,7 +80,6 @@ private:
 		i = p - 1;
 		j = r + 1;
 
-
 		while (true) {		//cormen guided implementation
 			do {
 				j--;
@@ -93,9 +89,8 @@ private:
 			} while (tab[i] < pivotValue);
 			if (i < j)
 				std::swap(tab[i], tab[j]);
-			else 
+			else
 				return j;
 		}
 	}
-
 };
