@@ -9,7 +9,7 @@
 #include <string>
 #include <fstream>
 
-#define M 3
+#define M 7
 
 template<typename T>
 class Menu
@@ -33,24 +33,32 @@ class Menu
 	}
 	
 	static void writeToFile(std::string filename, auto content) {
-		
+
+		std::ofstream outputFile(filename, std::ios::app);
+
+		if (!outputFile.is_open()) {
+			std::cerr << "Error opening file: " << filename << std::endl;
+			return;
+
+		}
+		outputFile << " ";
+		outputFile << content;
+
+		outputFile.close();
+	}
+	
+
+	static void cleanFile(std::string filename) {
+
 		std::ofstream outputFile(filename);
 
 		if (!outputFile.is_open()) {
 			std::cerr << "Error opening file: " << filename << std::endl;
 			return;
+
 		}
 
-		// Convert milliseconds to time_t
-		std::time_t time_seconds = std::chrono::duration_cast<std::chrono::seconds>(content).count();
-
-		// Convert time_t to string representation
-		std::string time_str = std::ctime(&time_seconds);
-
-		outputFile << time_str;
-
-		//std::cout << content;
-		std::cout << time_str;
+		outputFile << "";
 
 		outputFile.close();
 	}
@@ -63,7 +71,7 @@ public:
 		std::string input;
 
 		std::cout << "1 - Testuj algorytmy\n"
-			"2 - Rozpocznij workflow (spowoduje utworzenie plikow output1.txt, testy wszystkich algorytmow) aktualny runtime ~ 20 minut\n"
+			"2 - Rozpocznij workflow (spowoduje utworzenie plikow output.txt dla kazdej tablicy,\n    testy wszystkich algorytmow) aktualny runtime ~ 10 minut\n"
 			"0 - Wyjdz\n";
 
 		std::cin >> input;
@@ -92,7 +100,7 @@ private:
 
 	static void workflow()			//Runs automatized algorythm flow
 	{
-		int N[M] = { 5000, 10000, 20000 };//, 40000, 60000, 80000, 100000 };
+		int N[M] = { 10000, 20000, 40000, 80000, 200000, 400000, 800000 };	// 10000, 20000, 40000, 80000, 200000, 400000, 800000 };
 
 		TableManager<T> table(10);
 
@@ -107,41 +115,53 @@ private:
 		{
 			table.newTab(N[i]);
 			std::cout << N[i] << " LOOP\n";
+			std::string filename;
+
+			filename = "output" + std::to_string(N[i]) + ".txt";
+			cleanFile(filename);
 
 			for (int j = 0; j < 100; j++) //100 powtorzen
 			{							//polimorficzne podejscie niestety nie jest kompatybilne z templatami
 				table.newTab();
-				time = insertSort.sort(table.tabCopy, N[i]);
-				std::cout << time << std::endl;
-				//writeToFile("output.txt", time);
+				if (N[i] < 80000) {
+					time = insertSort.sort(table.tabCopy, N[i]);
+					writeToFile(filename, time);
+				}
 
 				table.renewTab();
 				time = heapSort.sort(table.tabCopy, N[i]);
-				std::cout << time << std::endl;
+				writeToFile(filename, time);
 
 				table.renewTab();
 				shellSort.setGap(ShellSort<T>::gapChoice::SHELL);
 				time = shellSort.sort(table.tabCopy, N[i]);
+				writeToFile(filename, time);
 
 				table.renewTab();
 				shellSort.setGap(ShellSort<T>::gapChoice::HIBBARD);
 				time = shellSort.sort(table.tabCopy, N[i]);
+				writeToFile(filename, time);
 
 				table.renewTab();
 				quickSort.setPivot(QuickSort<T>::pivotChoice::LEFT);
 				time = quickSort.sort(table.tabCopy, N[i]);
+				writeToFile(filename, time);
 
 				table.renewTab();
 				quickSort.setPivot(QuickSort<T>::pivotChoice::RIGHT);
 				time = quickSort.sort(table.tabCopy, N[i]);
+				writeToFile(filename, time);
 
 				table.renewTab();
 				quickSort.setPivot(QuickSort<T>::pivotChoice::MIDDLE);
 				time = quickSort.sort(table.tabCopy, N[i]);
+				writeToFile(filename, time);
 
 				table.renewTab();
 				quickSort.setPivot(QuickSort<T>::pivotChoice::RANDOM);
 				time = quickSort.sort(table.tabCopy, N[i]);
+				writeToFile(filename, time);
+				writeToFile(filename, "\n");
 			}
 		}
 		std::cout << "Workflow ended";
