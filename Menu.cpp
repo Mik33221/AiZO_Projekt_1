@@ -1,3 +1,4 @@
+/*
 #include "Menu.h"
 #include "TableManager.h"
 #include "InsertSort.h"
@@ -33,6 +34,7 @@ string isSorted(T* tab)
 }
 
 //menu
+
 void Menu::run()
 {
 	test_algorithms();
@@ -78,9 +80,17 @@ void Menu::workflow()
 
 void Menu::test_algorithms()
 {
-	cout << "1 - Wczytaj tablice z pliku .txt\n"
-		"2 - Wygeneruj losowa tablice\n"
-		"3 - Wyswietl nieposortowana tablice\n"
-		"4 - Sortuj tablice\n"
-		"5 - Wyswietl posortowana tablice\n";
-}
+	int menu;
+	do {
+		cout << "1 - Wczytaj tablice z pliku .txt\n"
+			"2 - Wygeneruj losowa tablice\n"
+			"3 - Wyswietl nieposortowana tablice\n"
+			"4 - Sortuj tablice\n"
+			"5 - Wyswietl posortowana tablice\n"
+			"0 - Wyjdz\n";
+		cin >> menu;
+		switch (menu) {
+
+		}
+	} while (menu);
+}*/
